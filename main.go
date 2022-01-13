@@ -18,6 +18,10 @@ var (
 )
 
 func main() {
+	if err := godotenv.Load("config/.env"); err != nil {
+		logrus.Fatalln(err)
+	}
+
 	app := cli.NewApp()
 	app.Name = "CIE VM delegate installer"
 	app.Usage = "CIE VM delegate installer"
@@ -42,7 +46,6 @@ func main() {
 		cli.StringFlag{
 			Name:   "assume-role-session-name",
 			Usage:  "aws iam role session name to assume",
-			Value:  "drone-s3",
 			EnvVar: "DRONE_SETTINGS_AWS_ASSUME_ROLE_SESSION_NAME",
 		},
 		cli.StringFlag{
@@ -80,10 +83,6 @@ func main() {
 }
 
 func run(c *cli.Context) error {
-	if c.String("env-file") != "" {
-		_ = godotenv.Load(c.String("env-file"))
-	}
-
 	if err := compose.Create(); err != nil {
 		return err
 	}
@@ -97,6 +96,8 @@ func run(c *cli.Context) error {
 		Region:                c.String("region"),
 	}
 
+	fmt.Printf("hey #%v", cred)
+
 	client, err := cred.GetClient()
 	if err != nil {
 		return err
@@ -109,8 +110,8 @@ func run(c *cli.Context) error {
 		RunnerEnvPath:     "config/.env",
 
 		// vm instance data
-		Image:        "ami-00517afdd8df42285",
-		InstanceType: "t2.medim",
+		Image:        "ami-03a0c45ebc70f98ea",
+		InstanceType: "t2.medium",
 	}
 	return vm.Create(client)
 }

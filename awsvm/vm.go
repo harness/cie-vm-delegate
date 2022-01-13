@@ -56,14 +56,14 @@ func (vm *VM) Create(client *ec2.EC2) error {
 				Tags:         convertTags(tags),
 			},
 		},
-		NetworkInterfaces: []*ec2.InstanceNetworkInterfaceSpecification{
-			{
-				AssociatePublicIpAddress: aws.Bool(vm.AllocPublicIP),
-				DeviceIndex:              aws.Int64(0),
-				SubnetId:                 aws.String(vm.Subnet),
-				Groups:                   aws.StringSlice(vm.Groups),
-			},
-		},
+		// NetworkInterfaces: []*ec2.InstanceNetworkInterfaceSpecification{
+		// 	{
+		// 		AssociatePublicIpAddress: aws.Bool(vm.AllocPublicIP),
+		// 		DeviceIndex:              aws.Int64(0),
+		// 		SubnetId:                 aws.String(vm.Subnet),
+		// 		Groups:                   aws.StringSlice(vm.Groups),
+		// 	},
+		// },
 	}
 	if vm.KeyPairName != "" {
 		in.KeyName = aws.String(vm.KeyPairName)
@@ -95,34 +95,72 @@ func getUserData(dockerComposePath, poolPath, runnerEnvPath string) (string, err
 	if err != nil {
 		return "", errors.Wrap(err, "failed to encode .env file")
 	}
-	return fmt.Sprintf(`
+	_ = fmt.Sprintf(`#cloud-config
 apt:
-sources:
+  sources:
 	docker.list:
-	source: deb [arch=amd64] https://download.docker.com/linux/ubuntu $RELEASE stable
-	keyid: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+	  source: deb [arch=amd64] https://download.docker.com/linux/ubuntu $RELEASE stable
+	  keyid: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
 packages:
 - docker-ce
 write_files:
 - path: /runner/docker-compose.yml
-permissions: '0600'
-encoding: b64
-content: %s
+  permissions: '0600'
+  encoding: b64
+  content: %s
 - path: /runner/.drone_pool.yml
-permissions: '0600'
-encoding: b64
-content: %s
+  permissions: '0600'
+  encoding: b64
+  content: %s
 - path: /runner/.env
-permissions: '0600'
-encoding: b64
-content: %s
+  permissions: '0600'
+  encoding: b64
+  content: %s
 runcmd:
-- sudo curl -L "https://github.com/docker/compose/releases/download/2.2.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-- sudo chmod +x /usr/local/bin/docker-compose
-- mkdir -p /runner
-- cd /runner
-- ssh-keygen -f id_rsa -q -P ""
-- sudo docker-compose up -d`, composeData, poolData, envData), nil
+- 'sudo curl -L "https://github.com/docker/compose/releases/download/2.2.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose'
+- 'sudo chmod +x /usr/local/bin/docker-compose'
+- 'mkdir -p /runner'
+- 'cd /runner'
+- 'ssh-keygen -f id_rsa -q -P ""'
+- 'sudo docker-compose up -d'`, composeData, poolData, envData)
+
+	return fmt.Sprintf(`#cloud-config
+# vim: syntax=yaml
+#
+packages:
+  - docker.io
+
+# create the docker group
+groups:
+  - docker
+
+# Add default auto created user to docker group
+system_info:
+  default_user:
+    groups: [docker]
+
+write_files:
+- path: /runner/docker-compose.yml
+  permissions: '0600'
+  encoding: b64
+  content: %s
+- path: /runner/.drone_pool.yml
+  permissions: '0600'
+  encoding: b64
+  content: %s
+- path: /runner/.env
+  permissions: '0644'
+  encoding: b64
+  content: %s
+runcmd:
+  - set -e
+  - [ ls, -l, / ]
+  - sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  - sudo chmod +x /usr/local/bin/docker-compose
+  - ssh-keygen -f /runner/id_rsa -q -P ""
+  - cd /runner
+  - sudo docker-compose up -d
+`, composeData, poolData, envData), nil
 }
 
 func getB64EncodedFile(path string) (string, error) {
