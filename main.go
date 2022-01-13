@@ -70,6 +70,11 @@ func main() {
 			Usage:  "dry run for debug purposes",
 			EnvVar: "DRY_RUN",
 		},
+		cli.BoolFlag{
+			Name:   "create-vm",
+			Usage:  "whether to create vm or generate tf file. If false, tf file will be created",
+			EnvVar: "CREATE_VM",
+		},
 		cli.StringFlag{
 			Name:  "env-file",
 			Usage: "source env file",
@@ -87,7 +92,7 @@ func run(c *cli.Context) error {
 		return err
 	}
 
-	cred := &awsvm.Creds{
+	cred := awsvm.Creds{
 		AccessKey:             c.String("access-key"),
 		SecretKey:             c.String("secret-key"),
 		AssumeRole:            c.String("assume-role"),
@@ -96,22 +101,19 @@ func run(c *cli.Context) error {
 		Region:                c.String("region"),
 	}
 
-	fmt.Printf("hey #%v", cred)
-
-	client, err := cred.GetClient()
-	if err != nil {
-		return err
-	}
-
 	vm := &awsvm.VM{
+		Credentials:       cred,
 		KeyPairName:       c.String("key-name"),
 		DockerComposePath: "docker-compose.yml",
 		PoolPath:          "config/.drone_pool.yml",
 		RunnerEnvPath:     "config/.env",
 
-		// vm instance data
 		Image:        "ami-03a0c45ebc70f98ea",
 		InstanceType: "t2.medium",
 	}
-	return vm.Create(client)
+	if c.Bool("create-vm") {
+		return vm.Create()
+	} else {
+		return vm.CreateTF()
+	}
 }
