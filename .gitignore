@@ -20,5 +20,5 @@ cie-vm-delegate
 
 .terraform/
 .terraform.lock.hcl
-terraform.tfstate
+terraform.tfstate*
 vm.tf

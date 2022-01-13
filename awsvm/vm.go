@@ -65,14 +65,13 @@ func (vm *VM) Create() error {
 		in.KeyName = aws.String(vm.KeyPairName)
 	}
 
-	fmt.Printf("spec ==== %v \n", in)
-	ret, err := client.RunInstancesWithContext(context.Background(), in)
+	_, err = client.RunInstancesWithContext(context.Background(), in)
 	if err != nil {
 		logrus.WithError(err).
 			Errorln("aws: [provision] failed to create VM")
 		return err
 	}
-	logrus.WithField("ret", ret).Infoln("created the vm")
+	logrus.Infoln("created the vm")
 	return nil
 }
 
@@ -106,10 +105,11 @@ func (vm *VM) CreateTF() error {
 	vmBody.SetAttributeValue("instance_type", cty.StringVal(vm.InstanceType))
 	vmBody.SetAttributeValue("key_name", cty.StringVal(vm.KeyPairName))
 	vmBody.SetAttributeValue("user_data_base64", cty.StringVal(userDataB64))
-	// vmBody.SetAttributeValue("tags", cty.StringLi)
-	// tagBlock := vmBody.AppendNewBlock("tags", nil)
-	// tagBody := tagBlock.Body()
-	// tagBody.SetAttributeValue("Name", cty.StringVal("harness-cie-delegate"))
+
+	tags := cty.MapVal(map[string]cty.Value{
+		"Name": cty.StringVal("harness-cie-delegate"),
+	})
+	vmBody.SetAttributeValue("tags", tags)
 
 	if err := ioutil.WriteFile("vm.tf", f.Bytes(), 0644); err != nil {
 		logrus.WithError(err).Errorln("failed to create vm.tf file")
