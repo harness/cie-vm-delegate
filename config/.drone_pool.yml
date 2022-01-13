@@ -1,0 +1,28 @@
+name: ubuntu
+max_pool_size: 1
+min_pool_size: 1
+
+account:
+  region: us-east-2
+
+instance:
+  ami: ami-00517afdd8df42285
+  type: t2.micro
+  network:
+    security_groups:
+      - sg-0f5aaeb48d35162a4
+
+---
+name: windows
+min_pool_size: 2
+max_pool_size: 2
+
+platform:
+ os: windows
+
+instance:
+  ami: ami-092f63f22143765a3
+  type: t3.large
+  network:
+    security_groups:
+      - sg-0474ce6a7a7d9c095

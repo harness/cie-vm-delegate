@@ -1,0 +1,32 @@
+version: "3.7"
+services:
+  harness-ng-delegate:
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 2048M
+    image: harness/delegate:latest
+    environment:
+      - ACCOUNT_ID=****
+      - ACCOUNT_SECRET=*****
+      - MANAGER_HOST_AND_PORT=https://qa.harness.io
+      - WATCHER_STORAGE_URL=https://app.harness.io/public/qa/premium/watchers
+      - WATCHER_CHECK_LOCATION=current.version
+      - REMOTE_WATCHER_URL_CDN=https://app.harness.io/public/shared/watchers/builds
+      - DELEGATE_STORAGE_URL=https://app.harness.io
+      - DELEGATE_CHECK_LOCATION=delegateqa.txt
+      - USE_CDN=true
+      - CDN_URL=https://app.harness.io
+      - DEPLOY_MODE=KUBERNETES
+      - DELEGATE_NAME=qwerty
+      - NEXT_GEN=true
+      - DELEGATE_DESCRIPTION=
+      - DELEGATE_TYPE=DOCKER
+      - DELEGATE_TAGS=
+      - DELEGATE_TASK_LIMIT=50
+      - DELEGATE_ORG_IDENTIFIER=
+      - DELEGATE_PROJECT_IDENTIFIER=
+      - PROXY_MANAGER=true
+      - VERSION_CHECK_DISABLED=false
+      - INIT_SCRIPT=echo "Docker delegate init script executed."
