@@ -14,8 +14,11 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
-.terraform
 
 docker-compose.yml
-
 cie-vm-delegate
+
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+vm.tf
