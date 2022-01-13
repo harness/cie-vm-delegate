@@ -1,5 +1,5 @@
 # cie-vm-delegate
-Easy installation of docker delegate for CIE AWS VM feature
+Easy installation of docker delegate for CIE AWS VM feature via terraform. With this script, it creates a terraform file which can be used to create the delegate vms for CIE feature.
 
 # Pre-requisites:
 1. Set up an access key and access secret [aws secret](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey) which is needed for configuration of the runner.
