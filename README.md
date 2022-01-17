@@ -12,4 +12,4 @@ authorizing-access-to-an-instance. We need to allow ingress to port 22 and 9079.
 2. Update `config/.drone_pool.yml` file. This file is used by drone aws runner to instantiate cache of AWS instances which will be used by CIE builds. This reduces the time for builds. Use [Pool](https://docs.drone.io/runner/aws/configuration/pool/) to reference attributes of .drone_pool.yml file.
 3. Update `config/harness-delegate.yml` file with the docker delegate yaml file generated on adding a new docker delegate in harness.
 4. Run: `go run main.go`. This will generate vm.tf file which can be used to create the delegate vm.
-5. To create the vm directly, execute `CREATE_VM=true go run main.go`. It is preferable to use step 4 since it allows updating delegate vm with security group, subnet, etc.
+5. To create the vm directly, execute `CREATE_VM=true go run main.go`. It is preferable to use step 4 since it allows updating terraform file for vm separately.
