@@ -1,5 +1,4 @@
 name: ubuntu
-max_pool_size: 1
 min_pool_size: 1
 
 account:
@@ -15,7 +14,6 @@ instance:
 ---
 name: windows
 min_pool_size: 2
-max_pool_size: 2
 
 platform:
  os: windows
