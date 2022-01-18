@@ -7,7 +7,7 @@ Easy installation of docker delegate for CIE AWS VM feature via terraform. With 
 3. (windows only instance) You need to add the AdministratorAccess policy to the IAM role associated with the access key and access secret [IAM](https://console.aws.amazon.com/iamv2/home#/users). You will use the instance profile arn iam_profile_arn, in your pipeline. This permission is required to enable SSH service on windows VM.
 4. Setup up vpc firewall rules for the build instances ec2 [ec2 authorizing-access-to-an-instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html)
 authorizing-access-to-an-instance. We need to allow ingress to port 22 and 9079. (Optional) RDP port 3389 can be opened for debugging purpose. Once complete you will have a security group id, which is needed for configuration of the runner.
-5. Create a EC2 key pair. This is used in step 2.
+5. Create a EC2 key pair.
 6. Install golang & terraform on my local system.
 
 # Steps:
