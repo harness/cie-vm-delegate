@@ -1,5 +1,6 @@
 name: ubuntu
-min_pool_size: 1
+min_pool_size: 1      # Pool cache size
+max_pool_size: 1      # Set this value same as min_pool_size
 
 account:
   region: us-east-2
@@ -13,7 +14,8 @@ instance:
 
 ---
 name: windows
-min_pool_size: 2
+min_pool_size: 2      # Pool cache size
+max_pool_size: 2      # Set this value same as min_pool_size
 
 platform:
  os: windows
@@ -24,3 +26,5 @@ instance:
   network:
     security_groups:
       - sg-0474ce6a7a7d9c095
+    # subnet_id: subnet-0ab151a78e9307b           # Uncomment this line if subnet needs to be set
+    # private_ip: true                            # Uncomment this line if public IP should not be allocated to the VM

@@ -76,6 +76,22 @@ func main() {
 			EnvVar: "CREATE_VM",
 		},
 		cli.StringFlag{
+			Name:   "delegate-ami",
+			Usage:  "AMI for the delegate VM",
+			EnvVar: "DELEGATE_AMI",
+			Value:  "ami-03a0c45ebc70f98ea",
+		},
+		cli.StringFlag{
+			Name:   "delegate-subnet",
+			Usage:  "Subnet for the delegate vm",
+			EnvVar: "DELEGATE_SUBNET",
+		},
+		cli.StringFlag{
+			Name:   "delegate-iam-profile-arn",
+			Usage:  "IAM profile ARN for the delegate vm",
+			EnvVar: "DELEGATE_IAM_ROLE_ARN",
+		},
+		cli.StringFlag{
 			Name:  "env-file",
 			Usage: "source env file",
 			Value: "config/.env",
@@ -108,8 +124,10 @@ func run(c *cli.Context) error {
 		PoolPath:          "config/.drone_pool.yml",
 		RunnerEnvPath:     "config/.env",
 
-		Image:        "ami-03a0c45ebc70f98ea",
-		InstanceType: "t2.medium",
+		Image:         c.String("delegate-ami"),
+		Subnet:        c.String("delegate-subnet"),
+		IamProfileArn: c.String("delegate-iam-profile-arn"),
+		InstanceType:  "t2.medium",
 	}
 	if c.Bool("create-vm") {
 		return vm.Create()

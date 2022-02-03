@@ -32,6 +32,7 @@ type VM struct {
 	VolumeSize    int64
 	VolumeIops    int64
 	Tags          map[string]string
+	IamProfileArn string
 }
 
 func (vm *VM) Create() error {
@@ -48,12 +49,20 @@ func (vm *VM) Create() error {
 	tags := createCopy(vm.Tags)
 	tags["Name"] = "harness-cie-delegate"
 
+	var iamProfile *ec2.IamInstanceProfileSpecification
+	if vm.IamProfileArn != "" {
+		iamProfile = &ec2.IamInstanceProfileSpecification{
+			Arn: aws.String(vm.IamProfileArn),
+		}
+	}
+
 	in := &ec2.RunInstancesInput{
-		ImageId:      aws.String(vm.Image),
-		InstanceType: aws.String(vm.InstanceType),
-		MinCount:     aws.Int64(1),
-		MaxCount:     aws.Int64(1),
-		UserData:     aws.String(userDataB64),
+		ImageId:            aws.String(vm.Image),
+		InstanceType:       aws.String(vm.InstanceType),
+		MinCount:           aws.Int64(1),
+		MaxCount:           aws.Int64(1),
+		UserData:           aws.String(userDataB64),
+		IamInstanceProfile: iamProfile,
 		TagSpecifications: []*ec2.TagSpecification{
 			{
 				ResourceType: aws.String("instance"),
@@ -63,6 +72,9 @@ func (vm *VM) Create() error {
 	}
 	if vm.KeyPairName != "" {
 		in.KeyName = aws.String(vm.KeyPairName)
+	}
+	if vm.Subnet != "" {
+		in.SubnetId = aws.String(vm.Subnet)
 	}
 
 	_, err = client.RunInstancesWithContext(context.Background(), in)
