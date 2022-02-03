@@ -88,8 +88,8 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:   "delegate-iam-profile",
-			Usage:  "IAM profile ARN for the delegate vm",
-			EnvVar: "DELEGATE_IAM_ROLE_NAME",
+			Usage:  "IAM profile name for the delegate vm",
+			EnvVar: "DELEGATE_IAM_PROFILE_NAME",
 		},
 		cli.StringFlag{
 			Name:  "env-file",
