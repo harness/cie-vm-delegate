@@ -26,3 +26,5 @@ instance:
   network:
     security_groups:
       - sg-0474ce6a7a7d9c095
+    # subnet_id: subnet-0ab151a78e9307b           # Uncomment this line if subnet needs to be set
+    # private_ip: true                            # Uncomment this line if public IP should not be allocated to the VM
