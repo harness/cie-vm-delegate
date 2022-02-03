@@ -32,7 +32,7 @@ type VM struct {
 	VolumeSize    int64
 	VolumeIops    int64
 	Tags          map[string]string
-	IamProfileArn string
+	IamProfile    string
 }
 
 func (vm *VM) Create() error {
@@ -50,9 +50,9 @@ func (vm *VM) Create() error {
 	tags["Name"] = "harness-cie-delegate"
 
 	var iamProfile *ec2.IamInstanceProfileSpecification
-	if vm.IamProfileArn != "" {
+	if vm.IamProfile != "" {
 		iamProfile = &ec2.IamInstanceProfileSpecification{
-			Arn: aws.String(vm.IamProfileArn),
+			Name: aws.String(vm.IamProfile),
 		}
 	}
 
@@ -117,6 +117,14 @@ func (vm *VM) CreateTF() error {
 	vmBody.SetAttributeValue("instance_type", cty.StringVal(vm.InstanceType))
 	vmBody.SetAttributeValue("key_name", cty.StringVal(vm.KeyPairName))
 	vmBody.SetAttributeValue("user_data_base64", cty.StringVal(userDataB64))
+
+	if vm.Subnet != "" {
+		vmBody.SetAttributeValue("subnet_id", cty.StringVal(vm.Subnet))
+	}
+
+	if vm.IamProfile != "" {
+		vmBody.SetAttributeValue("iam_instance_profile", cty.StringVal(vm.IamProfile))
+	}
 
 	tags := cty.MapVal(map[string]cty.Value{
 		"Name": cty.StringVal("harness-cie-delegate"),
