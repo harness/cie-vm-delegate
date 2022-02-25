@@ -1,30 +1,28 @@
 name: ubuntu
 min_pool_size: 1      # Pool cache size
-max_pool_size: 1      # Set this value same as min_pool_size
 
 account:
   region: us-east-2
 
 instance:
-  ami: ami-00517afdd8df42285
+  ami: ami-0fb653ca2d3203ac1
   type: t2.micro
   network:
     security_groups:
-      - sg-0f5aaeb48d35162a4
+      - sg-0a4fdb1c324b5a8f8
 
 ---
 name: windows
 min_pool_size: 2      # Pool cache size
-max_pool_size: 2      # Set this value same as min_pool_size
 
 platform:
- os: windows
+  os: windows
 
 instance:
-  ami: ami-092f63f22143765a3
+  ami: ami-0133b0c98a20f9943
   type: t3.large
   network:
     security_groups:
-      - sg-0474ce6a7a7d9c095
+      - sg-0a4fdb1c324b5a8f8
     # subnet_id: subnet-0ab151a78e9307b           # Uncomment this line if subnet needs to be set
     # private_ip: true                            # Uncomment this line if public IP should not be allocated to the VM

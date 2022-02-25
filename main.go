@@ -63,7 +63,7 @@ func main() {
 			Name:   "key-name",
 			Usage:  "aws key pair name",
 			Value:  "",
-			EnvVar: "DRONE_SETTINGS_KEY_PAIR_NAME",
+			EnvVar: "DRONE_SETTINGS_AWS_KEY_PAIR_NAME",
 		},
 		cli.BoolFlag{
 			Name:   "dry-run",
