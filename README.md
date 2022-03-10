@@ -4,8 +4,8 @@ Easy installation of docker delegate for CIE AWS VM feature via terraform. With 
 Before following the guide, please verify **go** and **terraform** are installed in your env 
 
 # Pre-requisites:
-1. Set up an "access key ID" and "access key secret" [aws secret](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey) to be used during the configuration of the runner for communication with AWS.
-   OR setup an IAM role with EC2Adminstrator access.
+1. Set up an "access key ID" and "access key secret" [aws secret](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey) to be used during the configuration of the runner for communication with AWS. <br />
+   (OR) create an [IAM role](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html#create-iam-role) with EC2AdminstratorFullAccess policy.
 3. Setup up vpc firewall rules for the build instances ec2 [ec2 authorizing-access-to-an-instance](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html)
 authorizing-access-to-an-instance. We need to allow ingress to port 9079. (Optional) RDP port 3389 on windows and ssh port 22 on linux can be opened for debugging purpose. Once complete you will have a security group id, which is needed for configuration of the runner.
 
