@@ -69,6 +69,12 @@ func (vm *VM) Create() error {
 				Tags:         convertTags(tags),
 			},
 		},
+		NetworkInterfaces: []*ec2.InstanceNetworkInterfaceSpecification{
+			{
+				SubnetId: aws.String(vm.Subnet),
+				Groups:   aws.StringSlice(vm.Groups),
+			},
+		},
 	}
 	if vm.KeyPairName != "" {
 		in.KeyName = aws.String(vm.KeyPairName)
@@ -124,6 +130,14 @@ func (vm *VM) CreateTF() error {
 
 	if vm.IamProfile != "" {
 		vmBody.SetAttributeValue("iam_instance_profile", cty.StringVal(vm.IamProfile))
+	}
+
+	if len(vm.Groups) != 0 {
+		var ctyGroups []cty.Value
+		for _, group := range vm.Groups {
+			ctyGroups = append(ctyGroups, cty.StringVal(group))
+		}
+		vmBody.SetAttributeValue("security_groups", cty.ListVal(ctyGroups))
 	}
 
 	tags := cty.MapVal(map[string]cty.Value{
