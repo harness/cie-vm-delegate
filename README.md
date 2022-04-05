@@ -45,12 +45,12 @@ b) To verify whether runner is able to communicate to lite-engine from delegate 
     nc -vz <build-vm-ip> 9079
 If status is not successful & lite-engine is not running on build VM, then security group is not setup correctly on the vm. Update security group in pool yaml such that runner can communicate with the pool VMs.
 
-Log locations:
+# Log location:
 
-# Linux:
+Linux:
 Lite-engine logs:       /var/log/lite-engine.log
 Cloud init output log:  /var/log/cloud-init-output.log
 
-# Windows:
-Lite-engine logs:       C:\Program Files\lite-engine\lite-engine.log
+Windows:
+Lite-engine logs:       C:\Program Files\lite-engine\log.out
 Cloud init output logs: C:\ProgramData\Amazon\EC2-Windows\Launch\Log\UserdataExecution.log
