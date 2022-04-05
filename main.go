@@ -91,6 +91,11 @@ func main() {
 			Usage:  "IAM profile name for the delegate vm",
 			EnvVar: "DELEGATE_IAM_PROFILE_NAME",
 		},
+		cli.StringSliceFlag{
+			Name:   "delegate-security-groups",
+			Usage:  "Security groups for delegate vm",
+			EnvVar: "DELEGATE_SECURITY_GROUPS",
+		},
 		cli.StringFlag{
 			Name:  "env-file",
 			Usage: "source env file",
@@ -128,6 +133,7 @@ func run(c *cli.Context) error {
 		Subnet:       c.String("delegate-subnet"),
 		IamProfile:   c.String("delegate-iam-profile"),
 		InstanceType: "t2.medium",
+		Groups:       c.StringSlice("delegate-security-groups"),
 	}
 	if c.Bool("create-vm") {
 		return vm.Create()
