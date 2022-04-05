@@ -124,6 +124,10 @@ func (vm *VM) CreateTF() error {
 	vmBody.SetAttributeValue("key_name", cty.StringVal(vm.KeyPairName))
 	vmBody.SetAttributeValue("user_data_base64", cty.StringVal(userDataB64))
 
+	rootDeviceBlock := vmBody.AppendNewBlock("root_block_device", []string{})
+	rootDevice := rootDeviceBlock.Body()
+	rootDevice.SetAttributeValue("volume_size", cty.NumberIntVal(30))
+
 	if vm.Subnet != "" {
 		vmBody.SetAttributeValue("subnet_id", cty.StringVal(vm.Subnet))
 	}
@@ -132,11 +136,13 @@ func (vm *VM) CreateTF() error {
 		vmBody.SetAttributeValue("iam_instance_profile", cty.StringVal(vm.IamProfile))
 	}
 
-	if len(vm.Groups) != 0 {
-		var ctyGroups []cty.Value
-		for _, group := range vm.Groups {
+	var ctyGroups []cty.Value
+	for _, group := range vm.Groups {
+		if group != "" {
 			ctyGroups = append(ctyGroups, cty.StringVal(group))
 		}
+	}
+	if len(ctyGroups) > 0 {
 		vmBody.SetAttributeValue("security_groups", cty.ListVal(ctyGroups))
 	}
 
