@@ -30,27 +30,28 @@ This file is used by the drone aws runner to connect to AWS. Use [AWS EC2 enviro
 2. For linux pool, ubuntu 20.04 is officially supported.
 3. To create a custom windows ami that works with windows pool, follow the steps mentioned in "Run Sysprep with EC2Config or EC2Launch" section of  https://aws.amazon.com/premiumsupport/knowledge-center/sysprep-create-install-ec2-windows-amis/
 
-## Troubleshooting:
+# Troubleshooting:
 
-# CIE build stuck at initialize step on health check
+## CIE build stuck at initialize step on health check
 If CIE build is stuck at initialize step on health check connectivity with lite-engine, either lite-engine is not running on build VM or there is a connectivity issue between runner and lite-engine.
 
-a) Verify whether lite-engine is running on build VM
-    -> Select a VM in running state from the pool.
-    -> SSH/RDP to the VM
-    -> Check whether lite-engine process is running on the VM
-    -> Lite-engine process is started at VM startup via cloud init script. Analyse cloud init output logs to debug issues related to startup of lite-engine process.
+- Verify whether lite-engine is running on build VM.
+    - Select a VM in running state from the pool.
+    - SSH/RDP to the VM.
+    - Check whether lite-engine process is running on the VM.
+    - Lite-engine process is started at VM startup via cloud init script. Analyse cloud init output logs to debug issues related to startup of lite-engine process.
 
-b) To verify whether runner is able to communicate to lite-engine from delegate VM:
-    nc -vz <build-vm-ip> 9079
-If status is not successful & lite-engine is not running on build VM, then security group is not setup correctly on the vm. Update security group in pool yaml such that runner can communicate with the pool VMs.
+- Verify whether runner is able to communicate to lite-engine from delegate VM.
+    * Run `nc -vz <build-vm-ip> 9079` from runner.
 
-# Log location:
+    If status is not successful & lite-engine is running on build VM, then security group is not setup correctly on the build vm. Update security group in pool yaml such that runner can communicate with the pool VMs.
 
-Linux:
-Lite-engine logs:       /var/log/lite-engine.log
-Cloud init output log:  /var/log/cloud-init-output.log
+## Log location:
 
-Windows:
-Lite-engine logs:       C:\Program Files\lite-engine\log.out
-Cloud init output logs: C:\ProgramData\Amazon\EC2-Windows\Launch\Log\UserdataExecution.log
+### Linux:
+**Lite-engine logs**:       /var/log/lite-engine.log  
+**Cloud init output log**:  /var/log/cloud-init-output.log
+
+### Windows:
+**Lite-engine logs**:       C:\Program Files\lite-engine\log.out  
+**Cloud init output logs**: C:\ProgramData\Amazon\EC2-Windows\Launch\Log\UserdataExecution.log
