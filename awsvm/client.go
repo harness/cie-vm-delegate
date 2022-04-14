@@ -19,6 +19,7 @@ type Creds struct {
 	AssumeRoleSessionName string
 	UserRoleArn           string
 	Region                string
+	AvailabilityZone      string
 }
 
 func (c *Creds) GetClient() (*ec2.EC2, error) {

@@ -110,6 +110,7 @@ func (vm *VM) CreateTF() error {
 	if vm.Credentials.Region != "" {
 		providerBody.SetAttributeValue("region", cty.StringVal(vm.Credentials.Region))
 	}
+
 	if vm.Credentials.AccessKey != "" {
 		providerBody.SetAttributeValue("access_key", cty.StringVal(vm.Credentials.AccessKey))
 	}
@@ -123,6 +124,9 @@ func (vm *VM) CreateTF() error {
 	vmBody.SetAttributeValue("instance_type", cty.StringVal(vm.InstanceType))
 	vmBody.SetAttributeValue("key_name", cty.StringVal(vm.KeyPairName))
 	vmBody.SetAttributeValue("user_data_base64", cty.StringVal(userDataB64))
+	if vm.Credentials.AvailabilityZone != "" {
+		vmBody.SetAttributeValue("availability_zone", cty.StringVal(vm.Credentials.AvailabilityZone))
+	}
 
 	rootDeviceBlock := vmBody.AppendNewBlock("root_block_device", []string{})
 	rootDevice := rootDeviceBlock.Body()
@@ -155,6 +159,7 @@ func (vm *VM) CreateTF() error {
 		logrus.WithError(err).Errorln("failed to create vm.tf file")
 		return err
 	}
+	fmt.Println("Successfully created terraform file vm.tf")
 	return nil
 }
 
@@ -194,7 +199,7 @@ write_files:
   permissions: '0600'
   encoding: b64
   content: %s
-- path: /runner/.drone_pool.yml
+- path: /runner/pool.yml
   permissions: '0600'
   encoding: b64
   content: %s
