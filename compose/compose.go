@@ -59,7 +59,7 @@ func getRunnerSpec() ServiceSpec {
 		Restart:    "unless-stopped",
 		Image:      "drone/drone-runner-aws:latest",
 		Volumes:    []string{".:/runner"},
-		Entrypoint: []string{"/bin/drone-runner-aws", "delegate"},
+		Entrypoint: []string{"/bin/drone-runner-aws", "delegate", "--envfile=.env", "--pool=pool.yml"},
 		WorkingDir: "/runner",
 		Ports:      []string{"3000:3000"},
 	}
