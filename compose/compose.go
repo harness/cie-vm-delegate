@@ -57,7 +57,7 @@ func Create() error {
 func getRunnerSpec() ServiceSpec {
 	return ServiceSpec{
 		Restart:    "unless-stopped",
-		Image:      "drone/drone-runner-aws@sha256:b9e62487915e7341c0bf3a29eb00edbf70c4d948e254144f86f31086a08adeb2",
+		Image:      "drone/drone-runner-aws:1.0.0-rc.6",
 		Volumes:    []string{".:/runner"},
 		Entrypoint: []string{"/bin/drone-runner-aws", "delegate", "--envfile=.env", "--pool=pool.yml"},
 		WorkingDir: "/runner",
