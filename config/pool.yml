@@ -20,6 +20,28 @@ instances:
       network:
         security_groups:
           - sg-0a4fdb1c324b5a8f8
+  - name: amazon-linux
+    type: amazon
+    pool: 4    # total number of warm instances in the pool at all times
+    limit: 100  # limit the total number of running servers. If exceeded block or error.
+    platform:
+      os: linux
+      arch: amd64
+      os_name: amazon-linux
+    spec:
+      account:
+        region: us-east-2
+        # key_pair_name:  # Key pair name.
+      ami: ami-0fa49cc9dc8d62c84
+      size: t3.medium
+      hibernate: true
+      network:
+        security_groups:
+          - sg-0a4fdb1c324b5a8f8
+        # subnet_id: subnet-0ab151a78e9307b           # Uncomment this line if subnet needs to be set
+        # private_ip: true                            # Uncomment this line if public IP should not be allocated to the VM
+      # disk:                                         # Uncomment disk section if disk size needs to be specified.
+      #   size: 20                                    # Size of the volume in GBs
   - name: windows
     type: amazon
     pool: 1     # total number of warm instances in the pool at all times
@@ -34,7 +56,7 @@ instances:
         # access_key_id: 
         # access_key_secret:
         # key_pair_name:  # Key pair name.
-      ami: ami-0133b0c98a20f9943
+      ami: ami-088d5094c0da312c0
       size: t3.large
       # hibernate: true                               # Pool vms are hibernated after initialization if this flag is set.
       network:
