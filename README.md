@@ -46,6 +46,19 @@ If CIE build is stuck at initialize step on health check connectivity with lite-
 
     If status is not successful & lite-engine is running on build VM, then security group is not setup correctly on the build vm. Update security group in pool yaml such that runner can communicate with the pool VMs.
 
+## Delegate is connected but the executions fail
+If the delegate is connected but the pipeline execution is failing. it could be because of the following:
+- AMI in use is no longer available
+    - The AMIs provided in `.drone_pool.yaml` are Amazon's. Amazon reprovisions these AMIs every 2 months.
+    - If this is the case, search for the AMI called "Microsoft Windows Server 2019 Base with Containers" and update the `config/.drone_pool.yaml` with the new AMI.
+- SG has not been created within utilized VPC
+    - The SecurityGroup provided in `.drone_pool.yaml` is a placeholder. A Security Group within the VPC requires inbound port 9079 (optionally SSH and RDP ports as well). Instruction for creating this can be found in pre-requisites.
+    - After the proper SG has been created, update the `config/.drone_pool.yaml` with the new SG.
+After making changes to the `.drone_pool.yaml` file you will need to either:
+- Re-run the `go run main.go` command to generate a new TF executable and re-provision your delegate
+- SSH into your delegate and manually edit the `runner/.drone_pool.yaml` with the correct values.
+
+
 ## Log location:
 
 ### Linux:
