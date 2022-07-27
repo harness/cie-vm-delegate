@@ -1,0 +1,45 @@
+version: ""
+instances:
+- name: ubuntu
+  default: false
+  type: amazon
+  pool: 1
+  limit: 0
+  spec:
+    account:
+      access_key_id: ""
+      access_key_secret: ""
+      region: ""
+    size: t2.micro
+    ami: ami-0fb653ca2d3203ac1
+    network:
+      vpc: ""
+      vpc_security_groups: []
+      security_groups:
+      - sg-0a4fdb1c324b5a8f8
+      subnet_id: ""
+      private_ip: false
+    hibernate: false
+- name: windows
+  default: false
+  type: amazon
+  pool: 2
+  limit: 0
+  platform:
+    os: windows
+    arch: ""
+  spec:
+    account:
+      access_key_id: ""
+      access_key_secret: ""
+      region: ""
+    size: t3.large
+    ami: ami-0133b0c98a20f9943
+    network:
+      vpc: ""
+      vpc_security_groups: []
+      security_groups:
+      - sg-0a4fdb1c324b5a8f8
+      subnet_id: ""
+      private_ip: false
+    hibernate: false
